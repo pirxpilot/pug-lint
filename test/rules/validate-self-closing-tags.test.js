@@ -21,7 +21,7 @@ function createTest(linter, fixturesPath) {
       it('should report multiple errors found in HTML file', () => {
         const result = linter.checkFile(`${fixturesPath}validate-self-closing-tags--html.pug`);
 
-        assert.equal(result.length, 16);
+        assert.equal(result.length, 14);
         assert.equal(result[0].code, 'PUG:LINT_VALIDATESELFCLOSINGTAGS');
         assert.equal(result[0].line, 20);
         assert.equal(result[0].column, 5);

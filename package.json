@@ -85,7 +85,7 @@
     "pug-lexer": "~5",
     "resolve": "^1.1.7",
     "strip-json-comments": "~5",
-    "void-elements": "^2.0.1"
+    "void-elements": "~3"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.13",
