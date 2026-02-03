@@ -1,21 +1,20 @@
-var path = require('path');
-var glob = require('glob');
-var Linter = require('../lib/linter');
+const { describe } = require('node:test');
+const Linter = require('../lib/linter.js');
+const { globSync } = require('node:fs');
 
-describe('reporters', function () {
-  var linter = new Linter();
-  var tests = [];
+describe('reporters', () => {
+  const linter = new Linter();
 
   linter.configure({
     disallowBlockExpansion: true,
     disallowMultipleLineBreaks: true
   });
 
-  glob.sync(path.join(__dirname, 'reporters/*.test.js')).forEach(function (file) {
-    tests.push(require(file));
-  });
+  const tests = globSync('reporters/*.test.js', {
+    cwd: __dirname
+  }).map(file => require(`./${file}`));
 
-  tests.forEach(function (test) {
+  tests.forEach(test => {
     test(linter);
   });
 });

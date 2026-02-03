@@ -1,24 +1,25 @@
 module.exports = createTest;
 
-var assert = require('assert');
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert');
 
 function createTest(linter, fixturesPath) {
-  describe('requireLowerCaseAttributes', function () {
-    describe('true', function () {
-      before(function () {
-        linter.configure({requireLowerCaseAttributes: true});
+  describe('requireLowerCaseAttributes', () => {
+    describe('true', () => {
+      before(() => {
+        linter.configure({ requireLowerCaseAttributes: true });
       });
 
-      it('should report mixed case attributes', function () {
-        assert.equal(linter.checkString('div(Class=\'class\')').length, 1);
+      it('should report mixed case attributes', () => {
+        assert.equal(linter.checkString("div(Class='class')").length, 1);
       });
 
-      it('should not report lower case attributes', function () {
-        assert.equal(linter.checkString('diV(class=\'class\')').length, 0);
+      it('should not report lower case attributes', () => {
+        assert.equal(linter.checkString("diV(class='class')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturesPath + 'require-lower-case-attributes.pug');
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(`${fixturesPath}require-lower-case-attributes.pug`);
 
         assert.equal(result.length, 3);
         assert.equal(result[0].code, 'PUG:LINT_REQUIRELOWERCASEATTRIBUTES');
@@ -26,8 +27,8 @@ function createTest(linter, fixturesPath) {
         assert.equal(result[0].column, 19);
       });
 
-      it('should not report errors found in XML', function () {
-        assert.equal(linter.checkString('doctype xml\ndiv(Class=\'class\')').length, 0);
+      it('should not report errors found in XML', () => {
+        assert.equal(linter.checkString("doctype xml\ndiv(Class='class')").length, 0);
       });
     });
   });

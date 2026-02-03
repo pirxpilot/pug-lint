@@ -1,26 +1,27 @@
 module.exports = createTest;
 
-var assert = require('assert');
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert');
 
 function createTest(linter, fixturesPath) {
-  var fixturePath = fixturesPath + 'disallow-specific-attributes.pug';
+  const fixturePath = `${fixturesPath}disallow-specific-attributes.pug`;
 
-  describe('disallowSpecificAttributes', function () {
-    describe('string', function () {
-      before(function () {
-        linter.configure({disallowSpecificAttributes: 'Title'});
+  describe('disallowSpecificAttributes', () => {
+    describe('string', () => {
+      before(() => {
+        linter.configure({ disallowSpecificAttributes: 'Title' });
       });
 
-      it('should report disallowed attributes', function () {
-        assert.equal(linter.checkString('div(title=\'title\')').length, 1);
+      it('should report disallowed attributes', () => {
+        assert.equal(linter.checkString("div(title='title')").length, 1);
       });
 
-      it('should not report allowed attributes', function () {
-        assert.equal(linter.checkString('div(class=\'class\')').length, 0);
+      it('should not report allowed attributes', () => {
+        assert.equal(linter.checkString("div(class='class')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 2);
         assert.equal(result[0].code, 'PUG:LINT_DISALLOWSPECIFICATTRIBUTES');
@@ -29,21 +30,21 @@ function createTest(linter, fixturesPath) {
       });
     });
 
-    describe('array', function () {
-      before(function () {
-        linter.configure({disallowSpecificAttributes: ['Title', 'alt']});
+    describe('array', () => {
+      before(() => {
+        linter.configure({ disallowSpecificAttributes: ['Title', 'alt'] });
       });
 
-      it('should report disallowed attributes', function () {
-        assert.equal(linter.checkString('div(title=\'title\', a=\'a\')').length, 1);
+      it('should report disallowed attributes', () => {
+        assert.equal(linter.checkString("div(title='title', a='a')").length, 1);
       });
 
-      it('should not report allowed attributes', function () {
-        assert.equal(linter.checkString('div(class=\'class\')').length, 0);
+      it('should not report allowed attributes', () => {
+        assert.equal(linter.checkString("div(class='class')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 3);
         assert.equal(result[0].code, 'PUG:LINT_DISALLOWSPECIFICATTRIBUTES');
@@ -52,27 +53,23 @@ function createTest(linter, fixturesPath) {
       });
     });
 
-    describe('object', function () {
-      var options = [
-        {div: ['A', 'c']},
-        {img: 'alt'},
-        {Span: ['title']}
-      ];
+    describe('object', () => {
+      const options = [{ div: ['A', 'c'] }, { img: 'alt' }, { Span: ['title'] }];
 
-      before(function () {
-        linter.configure({disallowSpecificAttributes: options});
+      before(() => {
+        linter.configure({ disallowSpecificAttributes: options });
       });
 
-      it('should report disallowed attributes', function () {
-        assert.equal(linter.checkString('div(title=\'title\', a=\'a\', b=\'b\')').length, 1);
+      it('should report disallowed attributes', () => {
+        assert.equal(linter.checkString("div(title='title', a='a', b='b')").length, 1);
       });
 
-      it('should not report allowed attributes', function () {
-        assert.equal(linter.checkString('div(class=\'title\')\r\nimg(title=\'title\')').length, 0);
+      it('should not report allowed attributes', () => {
+        assert.equal(linter.checkString("div(class='title')\r\nimg(title='title')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 4);
         assert.equal(result[0].code, 'PUG:LINT_DISALLOWSPECIFICATTRIBUTES');
