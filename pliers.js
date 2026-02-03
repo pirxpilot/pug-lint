@@ -1,10 +1,10 @@
 module.exports = tasks;
 
 const path = require('node:path');
-const glob = require('glob');
+const { globSync } = require('node:fs');
 
 function tasks(pliers) {
-  glob.sync(path.join(__dirname, '/pliers/*.js')).forEach(file => {
+  globSync(path.join(__dirname, '/pliers/*.js')).forEach(file => {
     require(file)(pliers);
   });
 }
