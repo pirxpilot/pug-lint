@@ -37,7 +37,7 @@ describe('cli', () => {
     return child;
   }
 
-  it('should output the current version number', done => {
+  it('should output the current version number', (_, done) => {
     const args = ['-V'];
 
     run(args, (err, code, stdout, stderr) => {
@@ -49,7 +49,7 @@ describe('cli', () => {
     });
   });
 
-  it('should output help', done => {
+  it('should output help', (_, done) => {
     const args = ['-h'];
     const message = 'Usage: pug-lint [options] <file ...>';
 
@@ -63,7 +63,7 @@ describe('cli', () => {
     });
   });
 
-  it('should output help if no file specified', done => {
+  it('should output help if no file specified', (_, done) => {
     const args = [];
     const message = 'Usage: pug-lint [options] <file ...>';
 
@@ -77,7 +77,7 @@ describe('cli', () => {
     });
   });
 
-  it('should report errors for file path', done => {
+  it('should report errors for file path', (_, done) => {
     const args = [`${fixturesRelativePath}invalid.pug`];
     const expectedReport = fs.readFileSync(`${fixturesPath}reporters/expected-invalid.txt`, 'utf-8');
 
@@ -90,7 +90,7 @@ describe('cli', () => {
     });
   });
 
-  it('should report errors for directory path', done => {
+  it('should report errors for directory path', (_, done) => {
     const dirname = `${fixturesRelativePath}rules/`;
     const args = [dirname];
     const expectedReport = fs.readFileSync(`${fixturesPath}reporters/expected-invalid.txt`, 'utf-8');
@@ -104,7 +104,7 @@ describe('cli', () => {
     });
   });
 
-  it('should use config when it is supplied', done => {
+  it('should use config when it is supplied', (_, done) => {
     const dirname = `${fixturesRelativePath}rules/`;
     const args = ['-c', `${fixturesPath}config-file/dotfile/.pug-lintrc`, `${dirname}disallow-block-expansion.pug`];
     const expectedReport = fs.readFileSync(
@@ -121,7 +121,7 @@ describe('cli', () => {
     });
   });
 
-  it('should error on invalid reporter', done => {
+  it('should error on invalid reporter', (_, done) => {
     const args = ['-r', 'nonexistent', fixturesRelativePath];
 
     run(args, (err, code, stdout, stderr) => {
@@ -133,7 +133,7 @@ describe('cli', () => {
     });
   });
 
-  it('should report errors using reporter', done => {
+  it('should report errors using reporter', (_, done) => {
     const dirname = `${fixturesRelativePath}rules/`;
     const args = [
       '-r',

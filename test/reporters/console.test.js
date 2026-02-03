@@ -1,4 +1,4 @@
-const { describe, it, beforeEach, afterEach } = require('node:test');
+const { describe, it, beforeEach } = require('node:test');
 const assert = require('node:assert');
 const reporter = require('../../lib/reporters/console.js');
 
@@ -10,36 +10,32 @@ function createTest(linter) {
       t.mock.method(console, 'error', () => {});
     });
 
-    afterEach(() => {
-      console.error.restore();
-    });
-
     it('should report no errors for valid string', () => {
       reporter(linter.checkString('span Text'));
 
-      assert.equal(console.error.called, false);
+      assert.equal(console.error.mock.callCount(), 0);
     });
 
     it('should report errors for valid string', () => {
       reporter(linter.checkString('div: span Text'));
 
       assert.equal(
-        console.error.getCall(0).args[0].indexOf('Block expansion operators must not be used') > -1,
+        console.error.mock.calls[0].arguments[0].indexOf('Block expansion operators must not be used') > -1,
         true,
-        console.error.getCall(0).args[0]
+        console.error.mock.calls[0].arguments[0]
       );
-      assert.equal(console.error.called, true);
+      assert.equal(console.error.mock.callCount(), 1);
     });
 
     it('should report multiple errors for valid string', () => {
       reporter(linter.checkString('div: span Text\r\r\r\ndiv: span Text'));
 
       assert.equal(
-        console.error.getCall(0).args[0].indexOf('Block expansion operators must not be used') > -1,
+        console.error.mock.calls[0].arguments[0].indexOf('Block expansion operators must not be used') > -1,
         true,
-        console.error.getCall(0).args[0]
+        console.error.mock.calls[0].arguments[0]
       );
-      assert.equal(console.error.called, true);
+      assert.equal(console.error.mock.callCount(), 1);
     });
   });
 }

@@ -1,17 +1,16 @@
 const { describe } = require('node:test');
 const assert = require('node:assert');
 const path = require('node:path');
-const glob = require('glob');
+const { globSync } = require('node:fs');
 const Linter = require('../lib/linter.js');
 
 describe('rules', () => {
   const linter = new Linter();
-  const tests = [];
   const fixturesPath = path.join(__dirname, 'fixtures/rules/');
 
-  glob.sync(path.join(__dirname, 'rules/*.test.js')).forEach(file => {
-    tests.push(require(file));
-  });
+  const tests = globSync('rules/*.test.js', {
+    cwd: __dirname
+  }).map(file => require(`./${file}`));
 
   tests.forEach(test => {
     test(linter, fixturesPath, testSingle);
