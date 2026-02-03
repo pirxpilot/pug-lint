@@ -74,7 +74,8 @@
     "test": "make check"
   },
   "dependencies": {
-    "acorn": "^4.0.1",
+    "acorn": "~7",
+    "acorn-walk": "~7",
     "commander": "^2.9.0",
     "css-selector-parser": "^1.1.0",
     "find-line-column": "^0.5.2",
