@@ -1,11 +1,9 @@
+[![NPM version][npm-image]][npm-url]
+[![Build Status][build-image]][build-url]
+[![Dependency Status][deps-image]][deps-url]
 # pug-lint
 
 An unopinionated and configurable linter and style checker for Pug (formerly Jade)
-
-[![build status](https://img.shields.io/travis/pugjs/pug-lint/master.svg)](https://travis-ci.org/pugjs/pug-lint)
-[![coverage status](https://img.shields.io/codecov/c/github/pugjs/pug-lint/master.svg)](https://codecov.io/gh/pugjs/pug-lint)
-[![dependency status](https://img.shields.io/david/pugjs/pug-lint.svg)](https://david-dm.org/pugjs/pug-lint)
-[![npm](https://img.shields.io/npm/v/pug-lint.svg)](https://www.npmjs.com/package/pug-lint)
 
 ## CLI
 
@@ -181,3 +179,12 @@ module.exports = {
 ```
 
 Once your shareable config is ready, you can [publish to npm](https://docs.npmjs.com/getting-started/publishing-npm-packages) to share with others. We recommend using the [`puglint`](https://www.npmjs.com/browse/keyword/puglint) and [`puglintconfig`](https://www.npmjs.com/browse/keyword/puglintconfig) keywords so others can easily find your module.
+
+[npm-image]: https://img.shields.io/npm/v/@pirxpilot/pug-lint
+[npm-url]: https://npmjs.org/package/@pirxpilot/pug-lint
+
+[build-url]: https://github.com/pirxpilot/pug-lint/actions/workflows/check.yaml
+[build-image]: https://img.shields.io/github/actions/workflow/status/pirxpilot/pug-lint/check.yaml?branch=main
+
+[deps-image]: https://img.shields.io/librariesio/release/npm/@pirxpilot/pug-lint
+[deps-url]: https://libraries.io/npm/@pirxpilot%2Fpug-lint
