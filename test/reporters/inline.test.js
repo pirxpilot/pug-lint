@@ -1,36 +1,44 @@
-var assert = require('assert');
-var sinon = require('sinon');
-var reporter = require('../../lib/reporters/inline');
+const { describe, it, beforeEach, afterEach } = require('node:test');
+const assert = require('node:assert');
+const reporter = require('../../lib/reporters/inline.js');
 
 module.exports = createTest;
 
 function createTest(linter) {
-  describe('inline', function () {
-    beforeEach(function () {
-      sinon.stub(console, 'error');
+  describe('inline', () => {
+    beforeEach(t => {
+      t.mock.method(console, 'error', () => {});
     });
 
-    afterEach(function () {
+    afterEach(() => {
       console.error.restore();
     });
 
-    it('should report no errors for valid string', function () {
+    it('should report no errors for valid string', () => {
       reporter(linter.checkString('span Text'));
 
       assert.equal(console.error.called, false);
     });
 
-    it('should report errors for valid string', function () {
+    it('should report errors for valid string', () => {
       reporter(linter.checkString('div: span Text'));
 
-      assert.equal(console.error.getCall(0).args[0].indexOf('Block expansion operators must not be used') > -1, true, console.error.getCall(0).args[0]);
+      assert.equal(
+        console.error.getCall(0).args[0].indexOf('Block expansion operators must not be used') > -1,
+        true,
+        console.error.getCall(0).args[0]
+      );
       assert.equal(console.error.called, true);
     });
 
-    it('should report multiple erros for valid string', function () {
+    it('should report multiple erros for valid string', () => {
       reporter(linter.checkString('div: span Text\r\r\r\ndiv: span Text'));
 
-      assert.equal(console.error.getCall(0).args[0].indexOf('Block expansion operators must not be used') > -1, true, console.error.getCall(0).args[0]);
+      assert.equal(
+        console.error.getCall(0).args[0].indexOf('Block expansion operators must not be used') > -1,
+        true,
+        console.error.getCall(0).args[0]
+      );
       assert.equal(console.error.called, true);
     });
   });

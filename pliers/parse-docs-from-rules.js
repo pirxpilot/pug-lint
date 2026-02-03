@@ -1,22 +1,22 @@
 module.exports = parseDocsFromRules;
 
-var fs = require('fs');
-var path = require('path');
-var docco = require('docco');
-var glob = require('glob');
+const fs = require('node:fs');
+const path = require('node:path');
+const docco = require('docco');
+const glob = require('glob');
 
 function parseDocsFromRules(pliers) {
-  var rulesPattern = path.join(__dirname, '../lib/rules/*.js');
-  var docs = [];
+  const rulesPattern = path.join(__dirname, '../lib/rules/*.js');
+  const docs = [];
 
-  glob.sync(rulesPattern).forEach(function (file) {
-    var source = fs.readFileSync(file, 'utf8');
-    var hasDocs;
+  glob.sync(rulesPattern).forEach(file => {
+    const source = fs.readFileSync(file, 'utf8');
+    let hasDocs;
 
-    docco.parse(file, source).map(function (section) {
+    docco.parse(file, source).map(section => {
       if (!hasDocs && section.docsText) {
         docs.push({
-          file: file,
+          file,
           text: section.docsText
         });
         hasDocs = true;

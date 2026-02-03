@@ -1,45 +1,46 @@
-var assert = require('assert');
-var bin = require.resolve('../bin/pug-lint');
-var fs = require('fs');
-var path = require('path');
-var spawn = require('child_process').spawn;
-var fixturesPath = path.join(__dirname, 'fixtures/');
-var fixturesRelativePath = './test/fixtures/';
-var packageDetails = require('../package.json');
+const { describe, it } = require('node:test');
+const assert = require('node:assert');
+const bin = require.resolve('../bin/pug-lint');
+const fs = require('node:fs');
+const path = require('node:path');
+const spawn = require('node:child_process').spawn;
+const fixturesPath = path.join(__dirname, 'fixtures/');
+const fixturesRelativePath = './test/fixtures/';
+const packageDetails = require('../package.json');
 
-describe('cli', function () {
+describe('cli', () => {
   function run(args, cb) {
-    var command = [bin].concat(args);
-    var stdout = '';
-    var stderr = '';
-    var node = process.execPath;
-    var child = spawn(node, command);
+    const command = [bin].concat(args);
+    let stdout = '';
+    let stderr = '';
+    const node = process.execPath;
+    const child = spawn(node, command);
 
     if (child.stderr) {
-      child.stderr.on('data', function (chunk) {
+      child.stderr.on('data', chunk => {
         stderr += chunk;
       });
     }
 
     if (child.stdout) {
-      child.stdout.on('data', function (chunk) {
+      child.stdout.on('data', chunk => {
         stdout += chunk;
       });
     }
 
     child.on('error', cb);
 
-    child.on('close', function (code) {
+    child.on('close', code => {
       cb(null, code, stdout, stderr);
     });
 
     return child;
   }
 
-  it('should output the current version number', function (done) {
-    var args = ['-V'];
+  it('should output the current version number', done => {
+    const args = ['-V'];
 
-    run(args, function (err, code, stdout, stderr) {
+    run(args, (err, code, stdout, stderr) => {
       assert(!err, err);
       assert.equal(code, 0, code);
       assert.equal(stderr, '', stderr);
@@ -48,11 +49,11 @@ describe('cli', function () {
     });
   });
 
-  it('should output help', function (done) {
-    var args = ['-h'];
-    var message = 'Usage: pug-lint [options] <file ...>';
+  it('should output help', done => {
+    const args = ['-h'];
+    const message = 'Usage: pug-lint [options] <file ...>';
 
-    run(args, function (err, code, stdout, stderr) {
+    run(args, (err, code, stdout, stderr) => {
       assert(!err, err);
       assert.equal(code, 0, code);
       assert.equal(stderr, '', stderr);
@@ -62,11 +63,11 @@ describe('cli', function () {
     });
   });
 
-  it('should output help if no file specified', function (done) {
-    var args = [];
-    var message = 'Usage: pug-lint [options] <file ...>';
+  it('should output help if no file specified', done => {
+    const args = [];
+    const message = 'Usage: pug-lint [options] <file ...>';
 
-    run(args, function (err, code, stdout, stderr) {
+    run(args, (err, code, stdout, stderr) => {
       assert(!err, err);
       assert.equal(code, 0, code);
       assert.equal(stderr, '', stderr);
@@ -76,11 +77,11 @@ describe('cli', function () {
     });
   });
 
-  it('should report errors for file path', function (done) {
-    var args = [fixturesRelativePath + 'invalid.pug'];
-    var expectedReport = fs.readFileSync(fixturesPath + 'reporters/expected-invalid.txt', 'utf-8');
+  it('should report errors for file path', done => {
+    const args = [`${fixturesRelativePath}invalid.pug`];
+    const expectedReport = fs.readFileSync(`${fixturesPath}reporters/expected-invalid.txt`, 'utf-8');
 
-    run(args, function (err, code, stdout, stderr) {
+    run(args, (err, code, stdout, stderr) => {
       assert(!err, err);
       assert.equal(code, 2, code);
       assert.equal(stdout, '', stdout);
@@ -89,12 +90,12 @@ describe('cli', function () {
     });
   });
 
-  it('should report errors for directory path', function (done) {
-    var dirname = fixturesRelativePath + 'rules/';
-    var args = [dirname];
-    var expectedReport = fs.readFileSync(fixturesPath + 'reporters/expected-invalid.txt', 'utf-8');
+  it('should report errors for directory path', done => {
+    const dirname = `${fixturesRelativePath}rules/`;
+    const args = [dirname];
+    const expectedReport = fs.readFileSync(`${fixturesPath}reporters/expected-invalid.txt`, 'utf-8');
 
-    run(args, function (err, code, stdout, stderr) {
+    run(args, (err, code, stdout, stderr) => {
       assert(!err, err);
       assert.equal(code, 2, code);
       assert.equal(stdout, '', stdout);
@@ -103,12 +104,15 @@ describe('cli', function () {
     });
   });
 
-  it('should use config when it is supplied', function (done) {
-    var dirname = fixturesRelativePath + 'rules/';
-    var args = ['-c', fixturesPath + 'config-file/dotfile/.pug-lintrc', dirname + 'disallow-block-expansion.pug'];
-    var expectedReport = fs.readFileSync(fixturesPath + 'reporters/expected-disallow-block-expansion--console.txt', 'utf-8');
+  it('should use config when it is supplied', done => {
+    const dirname = `${fixturesRelativePath}rules/`;
+    const args = ['-c', `${fixturesPath}config-file/dotfile/.pug-lintrc`, `${dirname}disallow-block-expansion.pug`];
+    const expectedReport = fs.readFileSync(
+      `${fixturesPath}reporters/expected-disallow-block-expansion--console.txt`,
+      'utf-8'
+    );
 
-    run(args, function (err, code, stdout, stderr) {
+    run(args, (err, code, stdout, stderr) => {
       assert(!err, err);
       assert.equal(code, 2, code);
       assert.equal(stdout, '', stdout);
@@ -117,10 +121,10 @@ describe('cli', function () {
     });
   });
 
-  it('should error on invalid reporter', function (done) {
-    var args = ['-r', 'nonexistent', fixturesRelativePath];
+  it('should error on invalid reporter', done => {
+    const args = ['-r', 'nonexistent', fixturesRelativePath];
 
-    run(args, function (err, code, stdout, stderr) {
+    run(args, (err, code, stdout, stderr) => {
       assert(!err, err);
       assert.equal(code, 1, code);
       assert.equal(stdout, '', stdout);
@@ -129,18 +133,21 @@ describe('cli', function () {
     });
   });
 
-  it('should report errors using reporter', function (done) {
-    var dirname = fixturesRelativePath + 'rules/';
-    var args = [
+  it('should report errors using reporter', done => {
+    const dirname = `${fixturesRelativePath}rules/`;
+    const args = [
       '-r',
       'inline',
       '-c',
-      fixturesPath + 'config-file/dotfile/.pug-lintrc',
-      dirname + 'disallow-block-expansion.pug'
+      `${fixturesPath}config-file/dotfile/.pug-lintrc`,
+      `${dirname}disallow-block-expansion.pug`
     ];
-    var expectedReport = fs.readFileSync(fixturesPath + 'reporters/expected-disallow-block-expansion--inline.txt', 'utf-8');
+    const expectedReport = fs.readFileSync(
+      `${fixturesPath}reporters/expected-disallow-block-expansion--inline.txt`,
+      'utf-8'
+    );
 
-    run(args, function (err, code, stdout, stderr) {
+    run(args, (err, code, stdout, stderr) => {
       assert(!err, err);
       assert.equal(code, 2, code);
       assert.equal(stdout, '', stdout);

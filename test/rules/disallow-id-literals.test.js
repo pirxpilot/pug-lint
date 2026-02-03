@@ -1,24 +1,25 @@
 module.exports = createTest;
 
-var assert = require('assert');
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert');
 
 function createTest(linter, fixturesPath) {
-  describe('disallowIdLiterals', function () {
-    describe('true', function () {
-      before(function () {
-        linter.configure({disallowIdLiterals: true});
+  describe('disallowIdLiterals', () => {
+    describe('true', () => {
+      before(() => {
+        linter.configure({ disallowIdLiterals: true });
       });
 
-      it('should report ID literal', function () {
+      it('should report ID literal', () => {
         assert.equal(linter.checkString('#id').length, 1);
       });
 
-      it('should not report ID attribute', function () {
-        assert.equal(linter.checkString('div(id=\'id\')').length, 0);
+      it('should not report ID attribute', () => {
+        assert.equal(linter.checkString("div(id='id')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturesPath + 'disallow-id-literals.pug');
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(`${fixturesPath}disallow-id-literals.pug`);
 
         assert.equal(result.length, 3);
         assert.equal(result[0].code, 'PUG:LINT_DISALLOWIDLITERALS');

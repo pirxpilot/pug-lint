@@ -1,26 +1,27 @@
 module.exports = createTest;
 
-var assert = require('assert');
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert');
 
 function createTest(linter, fixturesPath) {
-  var fixturePath = fixturesPath + 'validate-attribute-separator.pug';
+  const fixturePath = `${fixturesPath}validate-attribute-separator.pug`;
 
-  describe('validateAttributeSeparator', function () {
-    describe('space', function () {
-      before(function () {
-        linter.configure({validateAttributeSeparator: ' '});
+  describe('validateAttributeSeparator', () => {
+    describe('space', () => {
+      before(() => {
+        linter.configure({ validateAttributeSeparator: ' ' });
       });
 
-      it('should report invalid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\'  name=\'name\'  value=\'value\')').length, 2);
+      it('should report invalid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text'  name='name'  value='value')").length, 2);
       });
 
-      it('should not report valid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\' name=\'name\' value=\'value\')').length, 0);
+      it('should not report valid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text' name='name' value='value')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 31);
         assert.equal(result[0].code, 'PUG:LINT_VALIDATEATTRIBUTESEPARATOR');
@@ -30,15 +31,15 @@ function createTest(linter, fixturesPath) {
         assert.equal(result[1].column, 30);
       });
 
-      it('should not raise error on attribute having asterisk mark in name', function () {
-        assert.doesNotThrow(function () {
-          linter.checkString('input(*ngIf=\'editing\' type=\'text\' name=\'name\' value=\'value\')');
+      it('should not raise error on attribute having asterisk mark in name', () => {
+        assert.doesNotThrow(() => {
+          linter.checkString("input(*ngIf='editing' type='text' name='name' value='value')");
         }, /Invalid regular expression/);
       });
 
       describe('with ellipsis mark in name', () => {
         it('reports invalid attribute separator', () => {
-          const result = linter.checkString('input(type=\'text\'  ...props name=\'name\')');
+          const result = linter.checkString("input(type='text'  ...props name='name')");
 
           assert.equal(result.length, 1);
           assert.equal(result[0].code, 'PUG:LINT_VALIDATEATTRIBUTESEPARATOR');
@@ -46,29 +47,29 @@ function createTest(linter, fixturesPath) {
           assert.equal(result[0].column, 18);
         });
 
-        it('does not report with valid separator', function () {
-          const result = linter.checkString('input(...props type=\'text\' ...props name=\'name\' value=\'value\' ...props)');
+        it('does not report with valid separator', () => {
+          const result = linter.checkString("input(...props type='text' ...props name='name' value='value' ...props)");
 
           assert.equal(result.length, 0);
         });
       });
     });
 
-    describe('comma', function () {
-      before(function () {
-        linter.configure({validateAttributeSeparator: ','});
+    describe('comma', () => {
+      before(() => {
+        linter.configure({ validateAttributeSeparator: ',' });
       });
 
-      it('should report invalid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\' name=\'name\' value=\'value\')').length, 2);
+      it('should report invalid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text' name='name' value='value')").length, 2);
       });
 
-      it('should not report valid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\',name=\'name\',value=\'value\')').length, 0);
+      it('should not report valid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text',name='name',value='value')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 32);
         assert.equal(result[0].code, 'PUG:LINT_VALIDATEATTRIBUTESEPARATOR');
@@ -77,21 +78,21 @@ function createTest(linter, fixturesPath) {
       });
     });
 
-    describe('comma-space', function () {
-      before(function () {
-        linter.configure({validateAttributeSeparator: ', '});
+    describe('comma-space', () => {
+      before(() => {
+        linter.configure({ validateAttributeSeparator: ', ' });
       });
 
-      it('should report invalid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\' name=\'name\' value=\'value\')').length, 2);
+      it('should report invalid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text' name='name' value='value')").length, 2);
       });
 
-      it('should not report valid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\', name=\'name\', value=\'value\')').length, 0);
+      it('should not report valid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text', name='name', value='value')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 31);
         assert.equal(result[0].code, 'PUG:LINT_VALIDATEATTRIBUTESEPARATOR');
@@ -100,21 +101,21 @@ function createTest(linter, fixturesPath) {
       });
     });
 
-    describe('space-comma', function () {
-      before(function () {
-        linter.configure({validateAttributeSeparator: ' ,'});
+    describe('space-comma', () => {
+      before(() => {
+        linter.configure({ validateAttributeSeparator: ' ,' });
       });
 
-      it('should report invalid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\', name=\'name\', value=\'value\')').length, 2);
+      it('should report invalid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text', name='name', value='value')").length, 2);
       });
 
-      it('should not report valid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\' ,name=\'name\' ,value=\'value\')').length, 0);
+      it('should not report valid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text' ,name='name' ,value='value')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 32);
         assert.equal(result[0].code, 'PUG:LINT_VALIDATEATTRIBUTESEPARATOR');
@@ -123,21 +124,21 @@ function createTest(linter, fixturesPath) {
       });
     });
 
-    describe('space-comma-space', function () {
-      before(function () {
-        linter.configure({validateAttributeSeparator: ' , '});
+    describe('space-comma-space', () => {
+      before(() => {
+        linter.configure({ validateAttributeSeparator: ' , ' });
       });
 
-      it('should report invalid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\' name=\'name\' value=\'value\')').length, 2);
+      it('should report invalid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text' name='name' value='value')").length, 2);
       });
 
-      it('should not report valid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\' , name=\'name\' , value=\'value\')').length, 0);
+      it('should not report valid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text' , name='name' , value='value')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 33);
         assert.equal(result[0].code, 'PUG:LINT_VALIDATEATTRIBUTESEPARATOR');
@@ -146,8 +147,8 @@ function createTest(linter, fixturesPath) {
       });
     });
 
-    describe('indentation - spaces', function () {
-      before(function () {
+    describe('indentation - spaces', () => {
+      before(() => {
         linter.configure({
           validateAttributeSeparator: {
             separator: ' ',
@@ -156,16 +157,16 @@ function createTest(linter, fixturesPath) {
         });
       });
 
-      it('should report invalid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\', name=\'name\', value=\'value\')').length, 2);
+      it('should report invalid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text', name='name', value='value')").length, 2);
       });
 
-      it('should not report valid attribute separator', function () {
-        assert.equal(linter.checkString('input(type=\'text\' name=\'name\' value=\'value\')').length, 0);
+      it('should not report valid attribute separator', () => {
+        assert.equal(linter.checkString("input(type='text' name='name' value='value')").length, 0);
       });
 
-      it('should report multiple errors found in file', function () {
-        var result = linter.checkFile(fixturePath);
+      it('should report multiple errors found in file', () => {
+        const result = linter.checkFile(fixturePath);
 
         assert.equal(result.length, 27);
         assert.equal(result[0].code, 'PUG:LINT_VALIDATEATTRIBUTESEPARATOR');
@@ -176,8 +177,8 @@ function createTest(linter, fixturesPath) {
       });
     });
 
-    describe('indentation, comma-spaces', function () {
-      before(function () {
+    describe('indentation, comma-spaces', () => {
+      before(() => {
         linter.configure({
           validateAttributeSeparator: {
             separator: ', ',
@@ -186,12 +187,12 @@ function createTest(linter, fixturesPath) {
         });
       });
 
-      it('should not report valid attribute separator', function () {
-        var result = linter.checkString('div(foo="1",\n  bar="{hello:\' world\',\\n  666: true}",\n  batz="2")');
+      it('should not report valid attribute separator', () => {
+        let result = linter.checkString('div(foo="1",\n  bar="{hello:\' world\',\\n  666: true}",\n  batz="2")');
 
         assert.equal(result.length, 0);
 
-        result = linter.checkFile(fixturesPath + 'validate-attribute-separator--multiline.pug');
+        result = linter.checkFile(`${fixturesPath}validate-attribute-separator--multiline.pug`);
 
         assert.equal(result.length, 0);
       });

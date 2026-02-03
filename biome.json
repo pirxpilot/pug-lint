@@ -66,7 +66,8 @@
         "noDelete": "off"
       },
       "suspicious": {
-        "noAssignInExpressions": "off"
+        "noAssignInExpressions": "off",
+        "noTemplateCurlyInString": "off"
       }
     }
   }

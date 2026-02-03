@@ -1,24 +1,25 @@
 module.exports = createTest;
 
-var assert = require('assert');
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert');
 
 function createTest(linter, fixturesPath) {
-  describe('validateDivTags', function () {
-    describe('true', function () {
-      before(function () {
-        linter.configure({validateDivTags: true});
+  describe('validateDivTags', () => {
+    describe('true', () => {
+      before(() => {
+        linter.configure({ validateDivTags: true });
       });
 
-      it('should report unnecessary div tags', function () {
+      it('should report unnecessary div tags', () => {
         assert.equal(linter.checkString('div.class').length, 1);
       });
 
-      it('should not report needed div tags', function () {
-        assert.equal(linter.checkString('div(class=\'class\')').length, 0);
+      it('should not report needed div tags', () => {
+        assert.equal(linter.checkString("div(class='class')").length, 0);
       });
 
-      it('should report multiple errors found in HTML file', function () {
-        var result = linter.checkFile(fixturesPath + 'validate-div-tags--html.pug');
+      it('should report multiple errors found in HTML file', () => {
+        const result = linter.checkFile(`${fixturesPath}validate-div-tags--html.pug`);
 
         assert.equal(result.length, 3);
         assert.equal(result[0].code, 'PUG:LINT_VALIDATEDIVTAGS');
@@ -28,8 +29,8 @@ function createTest(linter, fixturesPath) {
         assert.equal(result[2].line, 10);
       });
 
-      it('should not report any errors in XML file', function () {
-        var result = linter.checkFile(fixturesPath + 'validate-div-tags--xml.pug');
+      it('should not report any errors in XML file', () => {
+        const result = linter.checkFile(`${fixturesPath}validate-div-tags--xml.pug`);
 
         assert.equal(result.length, 0);
       });
