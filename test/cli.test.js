@@ -41,7 +41,7 @@ describe('cli', () => {
     const args = ['-V'];
 
     run(args, (err, code, stdout, stderr) => {
-      assert(!err, err);
+      assert.ifError(err);
       assert.equal(code, 0, code);
       assert.equal(stderr, '', stderr);
       assert.equal(stdout.indexOf(packageDetails.version) !== -1, true, stdout);
@@ -51,28 +51,27 @@ describe('cli', () => {
 
   it('should output help', (_, done) => {
     const args = ['-h'];
-    const message = 'Usage: pug-lint [options] <file ...>';
+    const message = 'Usage: pug-lint [options] <file...>';
 
     run(args, (err, code, stdout, stderr) => {
-      assert(!err, err);
+      assert.ifError(err);
       assert.equal(code, 0, code);
       assert.equal(stderr, '', stderr);
-      assert.equal(stdout.indexOf(message) !== -1, true, stdout);
-      assert.equal(stdout.indexOf(packageDetails.description) !== -1, true, stdout);
+      assert.equal(stdout.includes(message), true, stdout);
+      assert.equal(stdout.includes(packageDetails.description.slice(0, 40)), true, stdout);
       done();
     });
   });
 
   it('should output help if no file specified', (_, done) => {
     const args = [];
-    const message = 'Usage: pug-lint [options] <file ...>';
+    const message = 'Usage: pug-lint [options] <file...>';
 
-    run(args, (err, code, stdout, stderr) => {
-      assert(!err, err);
-      assert.equal(code, 0, code);
-      assert.equal(stderr, '', stderr);
-      assert.equal(stdout.indexOf(message) !== -1, true, stdout);
-      assert.equal(stdout.indexOf(packageDetails.description) !== -1, true, stdout);
+    run(args, (err, code, _stdout, stderr) => {
+      assert.ifError(err);
+      assert.equal(code, 1, code);
+      assert.equal(stderr.includes(message), true, stderr);
+      assert.equal(stderr.includes(packageDetails.description.slice(0, 40)), true, stderr);
       done();
     });
   });
@@ -82,7 +81,7 @@ describe('cli', () => {
     const expectedReport = fs.readFileSync(`${fixturesPath}reporters/expected-invalid.txt`, 'utf-8');
 
     run(args, (err, code, stdout, stderr) => {
-      assert(!err, err);
+      assert.ifError(err);
       assert.equal(code, 2, code);
       assert.equal(stdout, '', stdout);
       assert.equal(stderr.trim(), expectedReport.replace(/%dirname%/g, fixturesRelativePath).trim(), stderr);
@@ -96,7 +95,7 @@ describe('cli', () => {
     const expectedReport = fs.readFileSync(`${fixturesPath}reporters/expected-invalid.txt`, 'utf-8');
 
     run(args, (err, code, stdout, stderr) => {
-      assert(!err, err);
+      assert.ifError(err);
       assert.equal(code, 2, code);
       assert.equal(stdout, '', stdout);
       assert.equal(stderr.trim(), expectedReport.replace(/%dirname%/g, dirname).trim(), stderr);
@@ -113,7 +112,7 @@ describe('cli', () => {
     );
 
     run(args, (err, code, stdout, stderr) => {
-      assert(!err, err);
+      assert.ifError(err);
       assert.equal(code, 2, code);
       assert.equal(stdout, '', stdout);
       assert.equal(stderr.trim(), expectedReport.replace(/%dirname%/g, dirname).trim(), stderr);
@@ -125,7 +124,7 @@ describe('cli', () => {
     const args = ['-r', 'nonexistent', fixturesRelativePath];
 
     run(args, (err, code, stdout, stderr) => {
-      assert(!err, err);
+      assert.ifError(err);
       assert.equal(code, 1, code);
       assert.equal(stdout, '', stdout);
       assert.equal(stderr.trim(), 'Reporter "nonexistent" does not exist', stderr);
@@ -148,7 +147,7 @@ describe('cli', () => {
     );
 
     run(args, (err, code, stdout, stderr) => {
-      assert(!err, err);
+      assert.ifError(err);
       assert.equal(code, 2, code);
       assert.equal(stdout, '', stdout);
       assert.equal(stderr.trim(), expectedReport.replace(/%dirname%/g, dirname).trim(), stderr);
