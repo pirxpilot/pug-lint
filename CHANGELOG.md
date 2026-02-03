@@ -1,3 +1,11 @@
+
+3.0.0 / 2026-02-03
+==================
+
+ * rename to @pirxpilot/pug-lint
+ * upgrade dependencies
+ * modernize project infrastructure
+
 ## v2.7.0 / 2023-03-21
 
 ### Highlights
