@@ -59,26 +59,19 @@
   "homepage": "https://github.com/pugjs/pug-lint",
   "repository": {
     "type": "git",
-    "url": "git@github.com:pugjs/pug-lint.git"
+    "url": "git+ssh://git@github.com/pugjs/pug-lint.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
   "main": "./lib/linter",
   "bin": {
-    "pug-lint": "./bin/pug-lint"
+    "pug-lint": "bin/pug-lint"
   },
   "scripts": {
-    "lint": "xo",
-    "inspect": "jsinspect",
-    "depcheck": "david",
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha test",
     "docs": "pliers buildRuleDocs",
     "schema": "pliers buildJsonSchema",
-    "changelog": "pliers buildChangelog",
-    "pretest": "npm run docs && npm run schema && npm run lint",
-    "test": "npm run coverage",
-    "posttest": "(istanbul check-coverage --statements 90 --branches 90 --functions 100 --lines 90 && rimraf coverage) || echo Look at 'coverage/lcov-report/index.html' to find out more"
+    "test": "make check"
   },
   "dependencies": {
     "acorn": "^4.0.1",
@@ -96,31 +89,17 @@
     "void-elements": "^2.0.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.13",
     "camel-case": "^3.0.0",
-    "changelog": "^1.0.7",
-    "david": "^7.0.0",
     "docco": "^0.7.0",
-    "istanbul": "^0.4.0",
-    "jsinspect": "^0.8.0",
-    "mocha": "^2.3.3",
     "moment": "^2.11.2",
     "no-case": "^2.3.0",
     "pliers": "^1.2.1",
     "pug-lint-config-clock": "^1.1.0",
-    "rimraf": "^2.5.2",
-    "sinon": "^1.17.2",
-    "xo": "^0.15.1",
-    "yeoman-generator": "^0.23.3",
-    "yo": "^1.8.4"
+    "yeoman-generator": "^0.23.4"
   },
-  "xo": {
-    "space": true,
-    "envs": [
-      "node",
-      "mocha"
-    ],
-    "ignores": [
-      "generators/*-templates/**"
-    ]
-  }
+  "files": [
+    "bin",
+    "lib"
+  ]
 }
