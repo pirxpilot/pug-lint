@@ -80,7 +80,6 @@
     "find-line-column": "^0.5.2",
     "glob": "^7.0.3",
     "minimatch": "^3.0.3",
-    "path-is-absolute": "^1.0.0",
     "pug-attrs": "~3",
     "pug-error": "~2",
     "pug-lexer": "~5",
